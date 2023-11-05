@@ -17,6 +17,11 @@ package main
 //	fmt.Println("Meow")
 //}
 //
+
+//type AFunc func(int, int) int
+//
+//var aFunc AFunc = func(a int, b int) int { return a + b }
+
 //func main() {
 //	var cat Animal
 //	cat = Cat("Hello Kitty")
