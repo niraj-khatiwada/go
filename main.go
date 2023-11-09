@@ -1,13 +1,17 @@
 package main
 
 import (
+	"errors"
 	"fmt"
-	"os"
 )
 
+var targetError = errors.New("error not found")
+
 func main() {
-	// FPrint asks where to write this string
-	fmt.Fprint(os.Stdout, "Hello World\n")
-	// Println writes to Stdout
-	fmt.Println("Hello World")
+	err := throwsError()
+	fmt.Println(errors.Is(err, targetError))
+}
+
+func throwsError() error {
+	return fmt.Errorf("error occurred: %w", targetError)
 }
