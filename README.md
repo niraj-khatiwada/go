@@ -1,1 +1,1 @@
-# Learning Golang on my free time
+# Learning Golang
