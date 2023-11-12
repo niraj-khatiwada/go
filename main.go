@@ -1,22 +1,28 @@
 package main
 
 import (
-	"context"
+	"encoding/json"
 	"fmt"
 	"log"
-	"time"
 )
 
+type Person struct {
+	name string
+	age  int
+}
+
 func main() {
-	ctx, cancel := context.WithTimeout(context.Background(), 1000*time.Millisecond)
-	defer cancel()
+	person := map[string]string{"name": "Niraj"}
 
-	time.Sleep(1001 * time.Millisecond) // Timeout
-	//time.Sleep(1000 * time.Millisecond) // Fine
+	// JSON.stringify()
+	bt, _ := json.Marshal(person)
+	fmt.Println("stringified", string(bt[:]))
 
-	if ctx.Err() == context.DeadlineExceeded {
-		log.Fatal("Context timeout")
-	} else {
-		fmt.Println("Hello World")
+	// JSON.parse()
+	var value map[string]string
+	if err := json.Unmarshal(bt[:], &value); err != nil {
+		log.Fatal("[error] error parsing json")
 	}
+	fmt.Println("parsed", value)
+
 }
