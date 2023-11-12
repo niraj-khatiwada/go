@@ -1,21 +1,22 @@
 package main
 
 import (
-	"errors"
+	"context"
 	"fmt"
+	"log"
+	"time"
 )
 
-var targetError = errors.New("error not found")
-
 func main() {
-	err := throwsError()
-	fmt.Println(errors.Is(err, targetError))
+	ctx, cancel := context.WithTimeout(context.Background(), 1000*time.Millisecond)
+	defer cancel()
 
-	hashMap := map[string]int{"niraj": 2}
+	time.Sleep(1001 * time.Millisecond) // Timeout
+	//time.Sleep(1000 * time.Millisecond) // Fine
 
-	fmt.Println(len(hashMap))
-}
-
-func throwsError() error {
-	return fmt.Errorf("error occurred: %w", targetError)
+	if ctx.Err() == context.DeadlineExceeded {
+		log.Fatal("Context timeout")
+	} else {
+		fmt.Println("Hello World")
+	}
 }
