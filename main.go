@@ -1,28 +1,42 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
-	"log"
+	"math/rand"
+	"sync"
+	"time"
 )
 
-type Person struct {
-	name string
-	age  int
+type Account struct {
+	balance int
+	lock    sync.Mutex
 }
 
+var account = Account{balance: 200}
+
 func main() {
-	person := map[string]string{"name": "Niraj"}
+	go (func() {
+		if err := withdraw(&account, 100); err != nil {
+			fmt.Println(err)
+		}
+	})()
+	go (func() {
+		if err := withdraw(&account, 150); err != nil {
+			fmt.Println(err)
+		}
+	})()
+	time.Sleep(1 * time.Second)
+}
 
-	// JSON.stringify()
-	bt, _ := json.Marshal(person)
-	fmt.Println("stringified", string(bt[:]))
-
-	// JSON.parse()
-	var value map[string]string
-	if err := json.Unmarshal(bt[:], &value); err != nil {
-		log.Fatal("[error] error parsing json")
+func withdraw(account *Account, amount int) error {
+	account.lock.Lock()
+	if amount > account.balance {
+		return fmt.Errorf("[error] withdraw amount greater than the balance")
 	}
-	fmt.Println("parsed", value)
-
+	random := rand.Intn(10)
+	time.Sleep(time.Duration(random) * time.Millisecond)
+	account.balance -= amount
+	account.lock.Unlock()
+	fmt.Printf("\n%d withdrawn. Remaining amount = %d\n", amount, account.balance)
+	return nil
 }
