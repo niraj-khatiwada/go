@@ -1,15 +1,21 @@
 package main
 
-import "fmt"
+import (
+	"encoding/json"
+	"fmt"
+)
 
 func main() {
-	rest := getNames("Niraj", "Suraj")
-	fmt.Println(rest)
+	jsan := map[string]string{"name": "Niraj", "age": "26"}
 
-	//	Spread
-	getNames(rest...)
-}
-func getNames(names ...string) []string {
-	fmt.Println("Rest Names", names)
-	return names
+	stringified, _ := json.Marshal(jsan)
+
+	fmt.Println("Stringified", stringified)
+
+	var parsed map[string]string
+	if err := json.Unmarshal(stringified, &parsed); err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println("Parsed", parsed)
+
 }
